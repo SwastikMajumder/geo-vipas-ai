@@ -564,7 +564,7 @@ def ENGINE(command):
         draw = ImageDraw.Draw(image)
 
         try:
-            font = ImageFont.truetype("arial.ttf", 48)
+            font = ImageFont.truetype("arial.ttf", 200)
         except IOError:
             font = ImageFont.load_default()
 
@@ -2339,7 +2339,7 @@ def ENGINE_R(command):
         draw = ImageDraw.Draw(image)
 
         try:
-            font = ImageFont.truetype("arial.ttf", 48)
+            font = ImageFont.truetype("arial.ttf", 200)
         except IOError:
             font = ImageFont.load_default()
 
