@@ -9,7 +9,7 @@ import copy
 
 
 def ENGINE(command):
-    print_on = True
+    plotter_on = True
     line_counter = []
     all_tri = []
     points = []
@@ -203,7 +203,7 @@ def ENGINE(command):
             line_sort(a2 + a3),
             line_sort(b2 + b3),
         ]
-        angle = [print_angle_3(a1 + a2 + a3), print_angle_3(b1 + b2 + b3)]
+        angle = [plotter_angle_3(a1 + a2 + a3), plotter_angle_3(b1 + b2 + b3)]
 
         for item in line:
             if item not in line_counter_convert():
@@ -223,10 +223,10 @@ def ENGINE(command):
     def aas_rule(a1, a2, a3, b1, b2, b3):
         line = [line_sort(a2 + a3), line_sort(b2 + b3)]
         angle = [
-            print_angle_3(a1 + a2 + a3),
-            print_angle_3(b1 + b2 + b3),
-            print_angle_3(a3 + a1 + a2),
-            print_angle_3(b3 + b1 + b2),
+            plotter_angle_3(a1 + a2 + a3),
+            plotter_angle_3(b1 + b2 + b3),
+            plotter_angle_3(a3 + a1 + a2),
+            plotter_angle_3(b3 + b1 + b2),
         ]
 
         for item in line:
@@ -251,7 +251,7 @@ def ENGINE(command):
             line_sort(a1 + a3),
             line_sort(b1 + b3),
         ]
-        angle = [print_angle_3(a1 + a2 + a3), print_angle_3(b1 + b2 + b3)]
+        angle = [plotter_angle_3(a1 + a2 + a3), plotter_angle_3(b1 + b2 + b3)]
 
         for item in line:
             if item not in line_counter_convert():
@@ -300,8 +300,8 @@ def ENGINE(command):
 
 
     def add_angle_equality(h1, h2):
-        h1 = print_angle_3(h1)
-        h2 = print_angle_3(h2)
+        h1 = plotter_angle_3(h1)
+        h2 = plotter_angle_3(h2)
         if h1 == h2:
             return
         row = [Fraction(0)] * len(all_angles)
@@ -587,15 +587,15 @@ def ENGINE(command):
         return image
 
 
-    def print_text(text, color="black", force=False, auto_next_line=True):
-        nonlocal print_on
+    def plotter_text(text, color="black", force=False, auto_next_line=True):
+        nonlocal plotter_on
         nonlocal log
         if auto_next_line:
             log += text + "\n"
         else:
             log += text
         return
-        if not force and not print_on:
+        if not force and not plotter_on:
             return
 
         if auto_next_line:
@@ -614,7 +614,7 @@ def ENGINE(command):
         image_label.image = img_tk
 
 
-    def print_diagram():
+    def plotter_diagram():
         nonlocal lines
         nonlocal points
         nonlocal point_pairs
@@ -662,7 +662,7 @@ def ENGINE(command):
         return count
 
 
-    def print_angle(a, b, c, a_do=True, c_do=True):
+    def plotter_angle(a, b, c, a_do=True, c_do=True):
         nonlocal lines
         nonlocal points
         nonlocal point_pairs
@@ -682,26 +682,26 @@ def ENGINE(command):
         return n2a(m) + n2a(b) + n2a(n)
 
 
-    def print_angle_2(angle, a_do=True, c_do=True):
+    def plotter_angle_2(angle, a_do=True, c_do=True):
         nonlocal lines
         nonlocal points
         nonlocal point_pairs
         x = angle
-        return print_angle(a2n(x[0]), a2n(x[1]), a2n(x[2]), a_do, c_do)
+        return plotter_angle(a2n(x[0]), a2n(x[1]), a2n(x[2]), a_do, c_do)
 
 
-    def print_angle_3(angle):
+    def plotter_angle_3(angle):
         lst = [
-            print_angle_2(angle, True, True),
-            print_angle_2(angle, True, False),
-            print_angle_2(angle, False, True),
-            print_angle_2(angle, False, False),
+            plotter_angle_2(angle, True, True),
+            plotter_angle_2(angle, True, False),
+            plotter_angle_2(angle, False, True),
+            plotter_angle_2(angle, False, False),
         ]
         return sorted(lst, key=lambda x: sur(x))[0]
 
 
-    def print_angle_4(a, b, c):
-        return print_angle_3(n2a(a) + n2a(b) + n2a(c))
+    def plotter_angle_4(a, b, c):
+        return plotter_angle_3(n2a(a) + n2a(b) + n2a(c))
 
 
     def combine(a, b):
@@ -709,15 +709,15 @@ def ENGINE(command):
         nonlocal points
         nonlocal point_pairs
 
-        a = print_angle_3(a)
-        b = print_angle_3(b)
+        a = plotter_angle_3(a)
+        b = plotter_angle_3(b)
         if a[1] != b[1]:
             return None
         if len(set(a + b)) != 4:
             return None
         r = a[0] + a[2] + b[0] + b[2]
         r = r.replace([x for x in r if r.count(x) == 2][0], "")
-        out = print_angle_3(r[0] + b[1] + r[1])
+        out = plotter_angle_3(r[0] + b[1] + r[1])
 
         return out
 
@@ -913,7 +913,7 @@ def ENGINE(command):
                 matrix_eq.append(item[-1])
 
 
-    def line_matrix_print(print_it=True):
+    def line_matrix_plotter(plotter_it=True):
         def remove_duplicate_rows(matrix):
 
             unique_rows = set(tuple(row) for row in matrix)
@@ -937,11 +937,11 @@ def ENGINE(command):
                         string += "+line(" + index_line_matrix(j) + ")"
             string += "=0\n"
         string = string.replace("\n+", "\n").replace("$+", "").replace("$", "")
-        if print_it and string != "":
-            print_text(string, "black", False, False)
+        if plotter_it and string != "":
+            plotter_text(string, "black", False, False)
 
 
-    def matrix_print(print_it=True):
+    def matrix_plotter(plotter_it=True):
         def remove_duplicates(matrix_2d, array_1d):
             unique_rows = {}
             for row, val in zip(matrix_2d, array_1d):
@@ -974,11 +974,11 @@ def ENGINE(command):
                         )
             string += "=" + str(int(matrix_eq[i])) + "\n"
         string = string.replace("\n+", "\n").replace("$+", "").replace("$", "")
-        if print_it and string != "":
-            print_text(string, "black", False, False)
+        if plotter_it and string != "":
+            plotter_text(string, "black", False, False)
 
 
-    def process(print_it=True):
+    def process(plotter_it=True):
         nonlocal lines
         nonlocal points
         nonlocal point_pairs
@@ -989,7 +989,7 @@ def ENGINE(command):
         nonlocal eq_list
 
         lines = [(points[start], points[end]) for start, end in point_pairs]
-        print_diagram()
+        plotter_diagram()
         output = []
         find = find_intersections_2(points, point_pairs)
 
@@ -999,7 +999,7 @@ def ENGINE(command):
 
                 if angle[0] != angle[1]:
 
-                    output.append(print_angle_4(angle[0], i, angle[1]))
+                    output.append(plotter_angle_4(angle[0], i, angle[1]))
 
         output = list(set(output))
         append_angles = set(output) - set(all_angles)
@@ -1085,15 +1085,15 @@ def ENGINE(command):
                 and straight_line([a2n(x) for x in angle[0]])
                 and straight_line([a2n(x) for x in angle[1]])
             ):
-                tmp1 = print_angle_3(angle[1][0] + angle[0][1] + angle[0][2])
-                tmp2 = print_angle_3(angle[0][0] + angle[1][1] + angle[1][2])
+                tmp1 = plotter_angle_3(angle[1][0] + angle[0][1] + angle[0][2])
+                tmp2 = plotter_angle_3(angle[0][0] + angle[1][1] + angle[1][2])
                 matrix.append([Fraction(0)] * len(all_angles))
                 matrix[-1][all_angles.index(tmp1)] = Fraction(1)
                 matrix[-1][all_angles.index(tmp2)] = Fraction(-1)
                 matrix_eq.append(Fraction(0))
 
-                tmp1 = print_angle_3(angle[1][2] + angle[0][1] + angle[0][2])
-                tmp2 = print_angle_3(angle[1][0] + angle[1][1] + angle[0][0])
+                tmp1 = plotter_angle_3(angle[1][2] + angle[0][1] + angle[0][2])
+                tmp2 = plotter_angle_3(angle[1][0] + angle[1][1] + angle[0][0])
                 matrix.append([Fraction(0)] * len(all_angles))
                 matrix[-1][all_angles.index(tmp1)] = Fraction(1)
                 matrix[-1][all_angles.index(tmp2)] = Fraction(-1)
@@ -1104,12 +1104,12 @@ def ENGINE(command):
 
         all_triangle(all_angles)
         do_isoceles()
-        matrix_print(print_it)
-        line_matrix_print(print_it)
+        matrix_plotter(plotter_it)
+        line_matrix_plotter(plotter_it)
         eq_list = list(set(eq_list))
-        if print_it:
+        if plotter_it:
             for item in eq_list:
-                print_text(string_equation(item))
+                plotter_text(string_equation(item))
 
 
     def all_cycle(graph):
@@ -1241,10 +1241,10 @@ def ENGINE(command):
                 v = "".join([n2a(y) for y in angle])
                 if angle[1] in tmp:
                     out.append(
-                        "(360-" + print_angle_3("".join([n2a(y) for y in angle])) + ")"
+                        "(360-" + plotter_angle_3("".join([n2a(y) for y in angle])) + ")"
                     )
                 else:
-                    out.append(print_angle_3("".join([n2a(y) for y in angle])))
+                    out.append(plotter_angle_3("".join([n2a(y) for y in angle])))
 
             if len(x) == 3:
                 all_tri.append(v)
@@ -1282,12 +1282,12 @@ def ENGINE(command):
             if item2 not in string_equation(str_form(eq)):
                 continue
 
-            eq = replace(eq, convert_angle_2(item2), convert_angle_2(print_angle_3(item2)))
+            eq = replace(eq, convert_angle_2(item2), convert_angle_2(plotter_angle_3(item2)))
             eq = replace(
                 eq,
                 tree_form(str_form(convert_angle_2(item2)).replace("f_angle", "f_xangle")),
                 tree_form(
-                    str_form(convert_angle_2(print_angle_3(item2))).replace(
+                    str_form(convert_angle_2(plotter_angle_3(item2))).replace(
                         "f_angle", "f_xangle"
                     )
                 ),
@@ -1328,7 +1328,7 @@ def ENGINE(command):
         if polygon_area([a, b, c]) != Fraction(0):
             out = perpendicular_line_intersection(a, b, c)
         points.append(out)
-        print_text("new point added")
+        plotter_text("new point added")
 
 
     def divide_line(line, new_val=None):
@@ -1401,10 +1401,10 @@ def ENGINE(command):
                 to_add.append((len(points) - 1, a))
                 to_add.append((len(points) - 1, b))
             a1, a2, a3, a4 = to_add[0][1], to_add[1][1], to_add[2][1], to_add[3][1]
-            s1 = print_angle_4(a1, len(points) - 1, a4), print_angle_4(
+            s1 = plotter_angle_4(a1, len(points) - 1, a4), plotter_angle_4(
                 a3, len(points) - 1, a2
             )
-            s2 = print_angle_4(a1, len(points) - 1, a3), print_angle_4(
+            s2 = plotter_angle_4(a1, len(points) - 1, a3), plotter_angle_4(
                 a4, len(points) - 1, a2
             )
 
@@ -1460,8 +1460,8 @@ def ENGINE(command):
             matrix.append(row)
             matrix_eq.append(Fraction(0))
 
-        eq1 = print_angle_3(point + n2a(num) + line[0])
-        eq2 = print_angle_3(point + n2a(num) + line[1])
+        eq1 = plotter_angle_3(point + n2a(num) + line[0])
+        eq2 = plotter_angle_3(point + n2a(num) + line[1])
         row = [Fraction(0)] * len(all_angles)
         row[all_angles.index(eq1)] = Fraction(1)
         matrix_eq.append(Fraction(90))
@@ -1601,8 +1601,8 @@ def ENGINE(command):
                         a = list(set(line1) - set(common))[0]
                         b = list(set(line2) - set(common))[0]
                         row = [Fraction(0)] * len(all_angles)
-                        row[all_angles.index(print_angle_3(common + a + b))] = Fraction(1)
-                        row[all_angles.index(print_angle_3(common + b + a))] = Fraction(-1)
+                        row[all_angles.index(plotter_angle_3(common + a + b))] = Fraction(1)
+                        row[all_angles.index(plotter_angle_3(common + b + a))] = Fraction(-1)
                         matrix.append(row)
                         matrix_eq.append(Fraction(0))
                         break
@@ -1630,18 +1630,18 @@ def ENGINE(command):
         fix_matrix()
 
 
-    def run_parallel_function(command):
+    def walk_parallel_function(command):
         nonlocal points
         nonlocal point_pairs
         nonlocal eq_list
-        nonlocal print_on
+        nonlocal plotter_on
         nonlocal matrix
         nonlocal matrix_eq
         nonlocal all_tri
         nonlocal line_matrix
         nonlocal line_counter
         nonlocal log
-        print_on = True
+        plotter_on = True
         line_counter = []
         all_tri = []
         points = []
@@ -1659,15 +1659,15 @@ def ENGINE(command):
                 process()
             if command != []:
                 string = command.pop(0)
-                print_text(">>> ", "green", True, False)
-                print_text(string, "blue", True, True)
+                plotter_text(">>> ", "green", True, False)
+                plotter_text(string, "blue", True, True)
             else:
-                print_text("\nend of program", "green", True, True)
+                plotter_text("\nend of program", "green", True, True)
                 return log
             if string == "hide":
-                print_on = False
+                plotter_on = False
             if string == "show":
-                print_on = True
+                plotter_on = True
             if string[:13] == "draw triangle":
                 draw_triangle()
             elif string == "draw quadrilateral":
@@ -1755,15 +1755,15 @@ def ENGINE(command):
 
                 eq_type = string.split(" ")[1]
                 if "angle_eq" == eq_type:
-                    a = print_angle_3(string.split(" ")[2])
-                    b = print_angle_3(string.split(" ")[3])
+                    a = plotter_angle_3(string.split(" ")[2])
+                    b = plotter_angle_3(string.split(" ")[3])
                     row = [Fraction(0)] * len(all_angles)
                     row[all_angles.index(a)] = Fraction(1)
                     row[all_angles.index(b)] = Fraction(-1)
                     matrix.append(row)
                     matrix_eq.append(Fraction(0))
                 elif "angle_val" == eq_type:
-                    a = print_angle_3(string.split(" ")[2])
+                    a = plotter_angle_3(string.split(" ")[2])
                     val = int(string.split(" ")[3])
                     row = [Fraction(0)] * len(all_angles)
                     row[all_angles.index(a)] = Fraction(1)
@@ -1787,11 +1787,11 @@ def ENGINE(command):
                     row[index_line(*b)] = Fraction(-1)
                     line_matrix.append(row)
                     fix_line_matrix()
-    return run_parallel_function(command)
+    return walk_parallel_function(command)
 
 
 def ENGINE_R(command):
-    print_on = True
+    plotter_on = True
     line_counter = []
     all_tri = []
     points = []
@@ -1844,7 +1844,7 @@ def ENGINE_R(command):
 
 
     def index_line(a, b):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         a, b = line_sort(a + b)
         a, b = a2n(a), a2n(b)
         if (a, b) in line_counter:
@@ -1856,7 +1856,7 @@ def ENGINE_R(command):
 
 
     def index_line_matrix(index):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         a, b = line_counter[index]
         return line_sort(n2a(a) + n2a(b))
 
@@ -1984,7 +1984,7 @@ def ENGINE_R(command):
             line_sort(a2 + a3),
             line_sort(b2 + b3),
         ]
-        angle = [print_angle_3(a1 + a2 + a3), print_angle_3(b1 + b2 + b3)]
+        angle = [plotter_angle_3(a1 + a2 + a3), plotter_angle_3(b1 + b2 + b3)]
 
         for item in line:
             if item not in line_counter_convert():
@@ -2004,10 +2004,10 @@ def ENGINE_R(command):
     def aas_rule(a1, a2, a3, b1, b2, b3):
         line = [line_sort(a2 + a3), line_sort(b2 + b3)]
         angle = [
-            print_angle_3(a1 + a2 + a3),
-            print_angle_3(b1 + b2 + b3),
-            print_angle_3(a3 + a1 + a2),
-            print_angle_3(b3 + b1 + b2),
+            plotter_angle_3(a1 + a2 + a3),
+            plotter_angle_3(b1 + b2 + b3),
+            plotter_angle_3(a3 + a1 + a2),
+            plotter_angle_3(b3 + b1 + b2),
         ]
 
         for item in line:
@@ -2032,7 +2032,7 @@ def ENGINE_R(command):
             line_sort(a1 + a3),
             line_sort(b1 + b3),
         ]
-        angle = [print_angle_3(a1 + a2 + a3), print_angle_3(b1 + b2 + b3)]
+        angle = [plotter_angle_3(a1 + a2 + a3), plotter_angle_3(b1 + b2 + b3)]
 
         for item in line:
             if item not in line_counter_convert():
@@ -2081,8 +2081,8 @@ def ENGINE_R(command):
 
 
     def add_angle_equality(h1, h2):
-        h1 = print_angle_3(h1)
-        h2 = print_angle_3(h2)
+        h1 = plotter_angle_3(h1)
+        h2 = plotter_angle_3(h2)
         if h1 == h2:
             return
         row = [Fraction(0)] * len(all_angles)
@@ -2104,7 +2104,7 @@ def ENGINE_R(command):
 
 
     def proof_fx_2(a, b):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         u, v = a, b
         for item in itertools.combinations(point_pairs, 2):
             if len(set([item[0][0], item[0][1], item[1][0], item[1][1]])) == 4:
@@ -2312,14 +2312,14 @@ def ENGINE_R(command):
 
 
     def straight_line_2(point_list):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         point_list = [a2n(x) for x in point_list]
         tmp = polygon_area([points[x] for x in point_list])
         return tmp == Fraction(0)
 
 
     def straight_line(point_list):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         tmp = polygon_area([points[x] for x in point_list])
 
         return tmp == Fraction(0)
@@ -2362,23 +2362,23 @@ def ENGINE_R(command):
         return image
 
 
-    def print_text(text, color="black", force=False, auto_next_line=True):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+    def plotter_text(text, color="black", force=False, auto_next_line=True):
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         return
 
 
     def display_image(image_path):
         pass
 
-    def print_diagram():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+    def plotter_diagram():
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         image = draw_points_and_lines(points, lines)
         return image
 
 
     def travel_till_end(start, step):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         done = False
         step_taken = [step]
         while not done:
@@ -2400,7 +2400,7 @@ def ENGINE_R(command):
 
 
     def sur(angle):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         count = 0
         if a2n(angle[0]) in surrounding_angle(a2n(angle[1])):
             count += 1
@@ -2409,8 +2409,8 @@ def ENGINE_R(command):
         return count
 
 
-    def print_angle(a, b, c, a_do=True, c_do=True):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+    def plotter_angle(a, b, c, a_do=True, c_do=True):
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         if a_do:
             a = travel_till_end(b, a)
@@ -2427,39 +2427,39 @@ def ENGINE_R(command):
         return n2a(m) + n2a(b) + n2a(n)
 
 
-    def print_angle_2(angle, a_do=True, c_do=True):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+    def plotter_angle_2(angle, a_do=True, c_do=True):
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         x = angle
-        return print_angle(a2n(x[0]), a2n(x[1]), a2n(x[2]), a_do, c_do)
+        return plotter_angle(a2n(x[0]), a2n(x[1]), a2n(x[2]), a_do, c_do)
 
 
-    def print_angle_3(angle):
+    def plotter_angle_3(angle):
         lst = [
-            print_angle_2(angle, True, True),
-            print_angle_2(angle, True, False),
-            print_angle_2(angle, False, True),
-            print_angle_2(angle, False, False),
+            plotter_angle_2(angle, True, True),
+            plotter_angle_2(angle, True, False),
+            plotter_angle_2(angle, False, True),
+            plotter_angle_2(angle, False, False),
         ]
         return sorted(lst, key=lambda x: sur(x))[0]
 
 
-    def print_angle_4(a, b, c):
-        return print_angle_3(n2a(a) + n2a(b) + n2a(c))
+    def plotter_angle_4(a, b, c):
+        return plotter_angle_3(n2a(a) + n2a(b) + n2a(c))
 
 
     def combine(a, b):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
 
-        a = print_angle_3(a)
-        b = print_angle_3(b)
+        a = plotter_angle_3(a)
+        b = plotter_angle_3(b)
         if a[1] != b[1]:
             return None
         if len(set(a + b)) != 4:
             return None
         r = a[0] + a[2] + b[0] + b[2]
         r = r.replace([x for x in r if r.count(x) == 2][0], "")
-        out = print_angle_3(r[0] + b[1] + r[1])
+        out = plotter_angle_3(r[0] + b[1] + r[1])
 
         return out
 
@@ -2480,7 +2480,7 @@ def ENGINE_R(command):
 
 
     def break_equation(equation):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         sub_equation_list = [equation]
         equation = equation
@@ -2546,7 +2546,7 @@ def ENGINE_R(command):
 
 
     def fix_matrix():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         for i in range(len(matrix)):
             if len(matrix[i]) < len(all_angles):
@@ -2554,7 +2554,7 @@ def ENGINE_R(command):
 
 
     def fix_line_matrix():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
 
         target_size = len(line_counter)
@@ -2569,7 +2569,7 @@ def ENGINE_R(command):
 
 
     def try_line_matrix():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         if line_matrix == []:
             return
@@ -2595,7 +2595,7 @@ def ENGINE_R(command):
 
 
     def matrices_equal(matrix1, matrix2):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         if len(matrix1) != len(matrix2) or len(matrix1[0]) != len(matrix2[0]):
             return False
@@ -2608,7 +2608,7 @@ def ENGINE_R(command):
 
 
     def try_matrix():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         if matrix == []:
             return
@@ -2657,14 +2657,14 @@ def ENGINE_R(command):
                 matrix_eq.append(item[-1])
 
 
-    def line_matrix_print(print_it=True):
+    def line_matrix_plotter(plotter_it=True):
         def remove_duplicate_rows(matrix):
 
             unique_rows = set(tuple(row) for row in matrix)
 
             return [list(row) for row in unique_rows]
 
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
 
         fix_line_matrix()
@@ -2681,11 +2681,11 @@ def ENGINE_R(command):
                         string += "+line(" + index_line_matrix(j) + ")"
             string += "=0\n"
         string = string.replace("\n+", "\n").replace("$+", "").replace("$", "")
-        if print_it and string != "":
-            print_text(string, "black", False, False)
+        if plotter_it and string != "":
+            plotter_text(string, "black", False, False)
 
 
-    def matrix_print(print_it=True):
+    def matrix_plotter(plotter_it=True):
         def remove_duplicates(matrix_2d, array_1d):
             unique_rows = {}
             for row, val in zip(matrix_2d, array_1d):
@@ -2696,7 +2696,7 @@ def ENGINE_R(command):
             new_array_1d = list(unique_rows.values())
             return new_matrix_2d, new_array_1d
 
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         fix_matrix()
         matrix, matrix_eq = remove_duplicates(matrix, matrix_eq)
@@ -2717,16 +2717,16 @@ def ENGINE_R(command):
                         )
             string += "=" + str(int(matrix_eq[i])) + "\n"
         string = string.replace("\n+", "\n").replace("$+", "").replace("$", "")
-        if print_it and string != "":
-            print_text(string, "black", False, False)
+        if plotter_it and string != "":
+            plotter_text(string, "black", False, False)
 
 
-    def process(print_it=True):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+    def process(plotter_it=True):
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
 
         lines = [(points[start], points[end]) for start, end in point_pairs]
-        print_diagram()
+        plotter_diagram()
         output = []
         find = find_intersections_2(points, point_pairs)
 
@@ -2736,7 +2736,7 @@ def ENGINE_R(command):
 
                 if angle[0] != angle[1]:
 
-                    output.append(print_angle_4(angle[0], i, angle[1]))
+                    output.append(plotter_angle_4(angle[0], i, angle[1]))
 
         output = list(set(output))
         append_angles = set(output) - set(all_angles)
@@ -2764,14 +2764,14 @@ def ENGINE_R(command):
         generate_all_lines()
         fix_line_matrix()
         
-        matrix_print(print_it)
-        line_matrix_print(print_it)
+        matrix_plotter(plotter_it)
+        line_matrix_plotter(plotter_it)
         eq_list = list(set(eq_list))
         
 
 
     def all_cycle(graph):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         cycles = []
 
@@ -2811,7 +2811,7 @@ def ENGINE_R(command):
 
 
     def perpendicular_line_intersection(segment_start, segment_end, point):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         x1, y1 = segment_start
         x2, y2 = segment_end
@@ -2839,7 +2839,7 @@ def ENGINE_R(command):
 
 
     def is_reflex_vertex(polygon, vertex_index):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         prev_index = (vertex_index - 1) % len(polygon)
         next_index = (vertex_index + 1) % len(polygon)
@@ -2853,7 +2853,7 @@ def ENGINE_R(command):
 
 
     def is_reflex_by_circle(polygon):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         output = []
         for i in range(len(polygon)):
@@ -2863,7 +2863,7 @@ def ENGINE_R(command):
 
 
     def all_triangle(all_angles):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter
 
 
         cycle = all_cycle(point_pairs)
@@ -2902,10 +2902,10 @@ def ENGINE_R(command):
                 v = "".join([n2a(y) for y in angle])
                 if angle[1] in tmp:
                     out.append(
-                        "(360-" + print_angle_3("".join([n2a(y) for y in angle])) + ")"
+                        "(360-" + plotter_angle_3("".join([n2a(y) for y in angle])) + ")"
                     )
                 else:
-                    out.append(print_angle_3("".join([n2a(y) for y in angle])))
+                    out.append(plotter_angle_3("".join([n2a(y) for y in angle])))
 
             if len(x) == 3:
                 all_tri.append(v)
@@ -2934,7 +2934,7 @@ def ENGINE_R(command):
 
 
     def fix_angle_line(eq):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
 
         eq = tree_form(eq)
@@ -2944,12 +2944,12 @@ def ENGINE_R(command):
             if item2 not in string_equation(str_form(eq)):
                 continue
 
-            eq = replace(eq, convert_angle_2(item2), convert_angle_2(print_angle_3(item2)))
+            eq = replace(eq, convert_angle_2(item2), convert_angle_2(plotter_angle_3(item2)))
             eq = replace(
                 eq,
                 tree_form(str_form(convert_angle_2(item2)).replace("f_angle", "f_xangle")),
                 tree_form(
-                    str_form(convert_angle_2(print_angle_3(item2))).replace(
+                    str_form(convert_angle_2(plotter_angle_3(item2))).replace(
                         "f_angle", "f_xangle"
                     )
                 ),
@@ -2974,7 +2974,7 @@ def ENGINE_R(command):
 
 
     def extend(line, point_start, distance):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         b = None
         a = points[a2n(point_start)]
@@ -2991,11 +2991,11 @@ def ENGINE_R(command):
         if polygon_area([a, b, c]) != Fraction(0):
             out = perpendicular_line_intersection(a, b, c)
         points.append(out)
-        print_text("new point added")
+        plotter_text("new point added")
 
 
     def divide_line(line, new_val=None):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         a = a2n(line[0])
         b = a2n(line[1])
@@ -3019,7 +3019,7 @@ def ENGINE_R(command):
 
 
     def is_point_on_line(line, point):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         a = points[line[0]]
         b = points[line[1]]
@@ -3029,7 +3029,7 @@ def ENGINE_R(command):
         return polygon_area([a, b, c]) == Fraction(0)
 
     def is_point_on_line_2(line, point):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         a = points[line[0]]
         b = points[line[1]]
@@ -3039,7 +3039,7 @@ def ENGINE_R(command):
         return is_within(a[0], b[0], c[0]) and is_within(a[1], b[1], c[1]) and polygon_area([a, b, c]) == Fraction(0)
 
     def find_line_for_point(point):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         output = []
         for i, line in enumerate(point_pairs):
@@ -3049,7 +3049,7 @@ def ENGINE_R(command):
 
 
     def connect_point(point_ab):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         output = []
         point_a, point_b = point_ab
@@ -3070,10 +3070,10 @@ def ENGINE_R(command):
                 to_add.append((len(points) - 1, a))
                 to_add.append((len(points) - 1, b))
             a1, a2, a3, a4 = to_add[0][1], to_add[1][1], to_add[2][1], to_add[3][1]
-            s1 = print_angle_4(a1, len(points) - 1, a4), print_angle_4(
+            s1 = plotter_angle_4(a1, len(points) - 1, a4), plotter_angle_4(
                 a3, len(points) - 1, a2
             )
-            s2 = print_angle_4(a1, len(points) - 1, a3), print_angle_4(
+            s2 = plotter_angle_4(a1, len(points) - 1, a3), plotter_angle_4(
                 a4, len(points) - 1, a2
             )
 
@@ -3091,7 +3091,7 @@ def ENGINE_R(command):
 
 
     def draw_triangle():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         points = [
             (Fraction(400), Fraction(800)),
@@ -3103,7 +3103,7 @@ def ENGINE_R(command):
 
 
     def perpendicular(point, line, ver=1):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         output = None
         if point in line or straight_line_2([point] + list(line)):
@@ -3130,8 +3130,8 @@ def ENGINE_R(command):
             matrix.append(row)
             matrix_eq.append(Fraction(0))
 
-        eq1 = print_angle_3(point + n2a(num) + line[0])
-        eq2 = print_angle_3(point + n2a(num) + line[1])
+        eq1 = plotter_angle_3(point + n2a(num) + line[0])
+        eq2 = plotter_angle_3(point + n2a(num) + line[1])
         row = [Fraction(0)] * len(all_angles)
         row[all_angles.index(eq1)] = Fraction(1)
         matrix_eq.append(Fraction(90))
@@ -3147,7 +3147,7 @@ def ENGINE_R(command):
 
 
     def convert_form(eq):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         def num_not_var(eq):
             for index, item in enumerate(all_angles):
@@ -3171,7 +3171,7 @@ def ENGINE_R(command):
 
 
     def convert_form_2(eq):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
 
         def num_not_var(eq):
@@ -3198,7 +3198,7 @@ def ENGINE_R(command):
 
 
     def find_all_paths(graph, start_node, end_node, path=[]):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         path = path + [start_node]
         if start_node == end_node:
@@ -3215,7 +3215,7 @@ def ENGINE_R(command):
 
 
     def generate_graph():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         graph = dict()
         for i in range(len(points)):
@@ -3224,7 +3224,7 @@ def ENGINE_R(command):
 
 
     def generate_all_lines():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         for item in itertools.combinations(range(len(points)), 2):
             for path in find_all_paths(generate_graph(), item[0], item[1]):
@@ -3234,7 +3234,7 @@ def ENGINE_R(command):
 
 
     def is_same_line(line1, line2):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         if line1 == line2:
             return True
@@ -3254,7 +3254,7 @@ def ENGINE_R(command):
 
 
     def do_isoceles():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         lst = line_counter_convert()
         for item in line_matrix:
@@ -3277,15 +3277,15 @@ def ENGINE_R(command):
                         a = list(set(line1) - set(common))[0]
                         b = list(set(line2) - set(common))[0]
                         row = [Fraction(0)] * len(all_angles)
-                        row[all_angles.index(print_angle_3(common + a + b))] = Fraction(1)
-                        row[all_angles.index(print_angle_3(common + b + a))] = Fraction(-1)
+                        row[all_angles.index(plotter_angle_3(common + a + b))] = Fraction(1)
+                        row[all_angles.index(plotter_angle_3(common + b + a))] = Fraction(-1)
                         matrix.append(row)
                         matrix_eq.append(Fraction(0))
                         break
 
 
     def do_cpct():
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         cpct_output = []
         for item in eq_list:
@@ -3305,7 +3305,7 @@ def ENGINE_R(command):
         fix_matrix()
 
     def process_join(join_arr):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
 
         for join_iter in join_arr:
             tmp = connect_point(join_iter)
@@ -3317,10 +3317,10 @@ def ENGINE_R(command):
             matrix.append(row)
             matrix_eq.append(Fraction(0))
 
-    def run_parallel_function(command):
-        nonlocal points, point_pairs, eq_list, print_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
+    def walk_parallel_function(command):
+        nonlocal points, point_pairs, eq_list, plotter_on, matrix, matrix_eq, all_tri, line_matrix, lines, line_counter, all_angles
         
-        print_on = True
+        plotter_on = True
         line_counter = []
         all_tri = []
         points = []
@@ -3337,29 +3337,29 @@ def ENGINE_R(command):
             command = command.split("\n")
             string = None
             index = 0
-            join_dont_print = True
+            join_dont_plotter = True
             while True:
                 if string not in {"show", "hide"}:
-                    process(join_dont_print)
+                    process(join_dont_plotter)
                 if command != []:
                     string = command.pop(0)
                     index += 1
-                    print_text(">>> ", "green", True, False)
-                    print_text(string, "blue", True, True)
+                    plotter_text(">>> ", "green", True, False)
+                    plotter_text(string, "blue", True, True)
                 else:
                     if join_arr != []:
                         process_join(join_arr)
                         process()
-                    print_text("\nend of program", "green", True, True)
-                    return print_diagram(), len(points), line_counter_convert(), all_angles
+                    plotter_text("\nend of program", "green", True, True)
+                    return plotter_diagram(), len(points), line_counter_convert(), all_angles
                 if string.split(" ")[0] != "join" and join_arr != []:
                     process_join(join_arr)
                     join_arr = []
-                    join_dont_print = True
+                    join_dont_plotter = True
                 if string == "hide":
-                    print_on = False
+                    plotter_on = False
                 if string == "show":
-                    print_on = True
+                    plotter_on = True
                 
                 if string[:13] == "draw triangle" and index == 1:
                     draw_triangle()
@@ -3394,7 +3394,7 @@ def ENGINE_R(command):
                 elif string.split(" ")[0] == "perpendicular" and string.split(" ")[2] == "to":
                     tmp4 = perpendicular(string.split(" ")[1], string.split(" ")[3])
                     if tmp4 is not None:
-                        print_text("\ncommand parsing error", "green", True, True)
+                        plotter_text("\ncommand parsing error", "green", True, True)
                         return "error"
                 elif string == "calculate":
                     output = try_matrix()
@@ -3434,7 +3434,7 @@ def ENGINE_R(command):
                      len(set([line_sort(x) for x in join_arr + string.split(" ")[1:]])) == len([line_sort(x) for x in join_arr + string.split(" ")[1:]]):
                     list_join = string.split(" ")[1:]
                     join_arr += list_join
-                    join_dont_print = False
+                    join_dont_plotter = False
                 elif string.split(" ")[0] == "equation":
 
                     eq_type = string.split(" ")[1]
@@ -3447,11 +3447,11 @@ def ENGINE_R(command):
                     elif "line_eq" == eq_type:
                         pass
                 else:
-                    print_text("\ncommand parsing error", "green", True, True)
+                    plotter_text("\ncommand parsing error", "green", True, True)
                     return "error"
         except:
             return "error"
-    return run_parallel_function(command)
+    return walk_parallel_function(command)
 
 
 
@@ -3480,8 +3480,8 @@ if 'lines' not in st.session_state:
 if 'angles' not in st.session_state:
     st.session_state.angles = []  # To store angles returned by the engine
 
-# Function to run geometry commands with accumulated command string
-def run_geometry_command(command):
+# Function to walk geometry commands with accumulated command string
+def walk_geometry_command(command):
     # Prepare the full command string by appending the new command
     new_accumulated_commands = f"{st.session_state.accumulated_commands}\n{command}".strip()
     result = ENGINE_R(new_accumulated_commands)  # Send the whole string
@@ -3525,8 +3525,8 @@ if tool == "Draw":
     draw_option = st.radio("What would you like to draw?", ("Draw Triangle", "Draw Quadrilateral"))
     command = "draw triangle" if draw_option == "Draw Triangle" else "draw quadrilateral"
 
-    if st.button("Run Command"):
-        result, error = run_geometry_command(command)
+    if st.button("walk Command"):
+        result, error = walk_geometry_command(command)
         if error:
             st.error("Invalid command. Please try again.")
         else:
@@ -3553,7 +3553,7 @@ if tool == "Join":
         if st.button("Join Points"):
             if point1 != point2:  # Ensure different points are selected
                 command = f"join {point1}{point2}"
-                result, error = run_geometry_command(command)
+                result, error = walk_geometry_command(command)
 
                 if error:
                     st.error("Invalid command. Please try again.")
@@ -3591,7 +3591,7 @@ if tool == "Extend":
 
         if st.button("Extend Line"):
             command = f"extend {line} from {point} for {extension_length}"
-            result, error = run_geometry_command(command)
+            result, error = walk_geometry_command(command)
 
             if error:
                 st.error("Invalid command. Please try again.")
@@ -3622,7 +3622,7 @@ if tool == "Perpendicular":
 
         if st.button("Create Perpendicular"):
             command = f"perpendicular {point} to {line_to_perpendicular}"
-            result, error = run_geometry_command(command)
+            result, error = walk_geometry_command(command)
 
             if error:
                 st.error("Invalid command. Please try again.")
@@ -3650,7 +3650,7 @@ if tool == "Split":
 
         if st.button("Split Line"):
             command = f"split {line_to_split}"
-            result, error = run_geometry_command(command)
+            result, error = walk_geometry_command(command)
 
             if error:
                 st.error("Invalid command. Please try again.")
@@ -3679,7 +3679,7 @@ if tool == "Set Angles Equal":
         if st.button("Set Angles Equal"):
             if angle1 != angle2:  # Ensure different angles are selected
                 command = f"equation angle_eq {angle1} {angle2}"
-                result, error = run_geometry_command(command)
+                result, error = walk_geometry_command(command)
 
                 if error:
                     st.error("Invalid command. Please try again.")
@@ -3710,7 +3710,7 @@ if tool == "Angle Value":
 
         if st.button("Set Angle Value"):
             command = f"equation angle_val {angle} {angle_value}"
-            result, error = run_geometry_command(command)
+            result, error = walk_geometry_command(command)
 
             if error:
                 st.error("Invalid command. Please try again.")
@@ -3738,7 +3738,7 @@ if tool == "Set Lines Equal":
 
         if st.button("Set Lines Equal"):
             command = f"equation line_eq {line1} {line2}"  # Assuming this command checks if lines are equal
-            result, error = run_geometry_command(command)
+            result, error = walk_geometry_command(command)
 
             if error:
                 st.error("Invalid command. Please try again.")
@@ -3768,7 +3768,7 @@ if tool == "Parallel Line":
 
         if st.button("Create Parallel Line"):
             command = f"equation parallel_line {line2} {line1}"
-            result, error = run_geometry_command(command)
+            result, error = walk_geometry_command(command)
 
             if error:
                 st.error("Invalid command. Please try again.")
@@ -3787,11 +3787,11 @@ if tool == "Parallel Line":
     else:
         st.warning("At least one line is needed to create a parallel line.")
 
-# Add button to run accumulated commands
+# Add button to walk accumulated commands
 if st.sidebar.button("Execute Accumulated Commands"):
     command = st.session_state.accumulated_commands  # Get the accumulated commands
     if command:  # Ensure there are commands to execute
-        output = ENGINE(command + "\ncompute\ncompute")  # Run the accumulated commands
+        output = ENGINE(command + "\ncompute\ncompute")  # walk the accumulated commands
         st.subheader("Analysis:")
         st.markdown("```\n" + output + "\n```") 
     else:
