@@ -3525,7 +3525,7 @@ if tool == "Draw":
     draw_option = st.radio("What would you like to draw?", ("Draw Triangle", "Draw Quadrilateral"))
     command = "draw triangle" if draw_option == "Draw Triangle" else "draw quadrilateral"
 
-    if st.button("walk Command"):
+    if st.button("Run Command"):
         result, error = walk_geometry_command(command)
         if error:
             st.error("Invalid command. Please try again.")
