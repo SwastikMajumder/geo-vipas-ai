@@ -1,5 +1,6 @@
+import matplotlib.pyplot as plt
 import streamlit as st
-from PIL import Image, ImageDraw, ImageFont  # For creating the initial black-and-white image
+from PIL import Image, ImageDraw
 import re
 import itertools
 import math
@@ -551,40 +552,45 @@ def ENGINE(command):
 
 
     def draw_points_and_lines(
-        points,
-        lines,
-        image_size=(1500, 1500),
-        point_radius=5,
-        point_color=(0, 0, 0),
-        line_color=(255, 0, 0),
-        text_color=(0, 0, 0),
-    ):
+            points,
+            lines,
+            image_size=(1500, 1500),
+            point_radius=5,
+            point_color='black',
+            line_color='red',
+            text_color='black',
+        ):
+        # Create a new figure with a specified size
+        fig, ax = plt.subplots(figsize=(image_size[0] / 100, image_size[1] / 100), dpi=100)
+        
+        # Set the limits and aspect of the plot
+        ax.set_xlim(0, image_size[0])
+        ax.set_ylim(0, image_size[1])
+        ax.set_aspect('equal')
+        ax.axis('off')  # Turn off the axis
 
-        image = Image.new("RGB", image_size, color="white")
-        draw = ImageDraw.Draw(image)
-
-        try:
-            font = ImageFont.truetype("arial.ttf", 48)
-        except IOError:
-            font = ImageFont.load_default()
-
+        # Draw points
         for index, (x, y) in enumerate(points):
-            draw.ellipse(
-                (x - point_radius, y - point_radius, x + point_radius, y + point_radius),
-                fill=point_color,
-            )
+            circle = plt.Circle((x, y), point_radius, color=point_color)
+            ax.add_artist(circle)
+            ax.text(x + point_radius + 5, y - point_radius - 5, n2a(index), color=text_color, fontsize=48)
 
-            draw.text(
-                (x + point_radius + 5, y - point_radius - 5),
-                n2a(index),
-                fill=text_color,
-                font=font,
-            )
-
+        # Draw lines
         for (x1, y1), (x2, y2) in lines:
-            draw.line([(x1, y1), (x2, y2)], fill=line_color, width=2)
+            ax.plot([x1, x2], [y1, y2], color=line_color, linewidth=2)
 
+        # Adjust layout and return the figure as an image
+        plt.tight_layout()
+        plt.draw()
+        
+        # Convert the Matplotlib figure to a PIL image
+        plt_image = plt.gcf()
+        plt_image.canvas.draw()
+        image = np.frombuffer(plt_image.canvas.tostring_rgb(), dtype=np.uint8)
+        image = image.reshape(plt_image.canvas.get_width_height()[::-1] + (3,))
+        
         return image
+
 
 
     def plotter_text(text, color="black", force=False, auto_next_line=True):
@@ -2326,40 +2332,45 @@ def ENGINE_R(command):
 
 
     def draw_points_and_lines(
-        points,
-        lines,
-        image_size=(1500, 1500),
-        point_radius=5,
-        point_color=(0, 0, 0),
-        line_color=(255, 0, 0),
-        text_color=(0, 0, 0),
-    ):
+            points,
+            lines,
+            image_size=(1500, 1500),
+            point_radius=5,
+            point_color='black',
+            line_color='red',
+            text_color='black',
+        ):
+        # Create a new figure with a specified size
+        fig, ax = plt.subplots(figsize=(image_size[0] / 100, image_size[1] / 100), dpi=100)
+        
+        # Set the limits and aspect of the plot
+        ax.set_xlim(0, image_size[0])
+        ax.set_ylim(0, image_size[1])
+        ax.set_aspect('equal')
+        ax.axis('off')  # Turn off the axis
 
-        image = Image.new("RGB", image_size, color="white")
-        draw = ImageDraw.Draw(image)
-
-        try:
-            font = ImageFont.truetype("arial.ttf", 48)
-        except IOError:
-            font = ImageFont.load_default()
-
+        # Draw points
         for index, (x, y) in enumerate(points):
-            draw.ellipse(
-                (x - point_radius, y - point_radius, x + point_radius, y + point_radius),
-                fill=point_color,
-            )
+            circle = plt.Circle((x, y), point_radius, color=point_color)
+            ax.add_artist(circle)
+            ax.text(x + point_radius + 5, y - point_radius - 5, n2a(index), color=text_color, fontsize=48)
 
-            draw.text(
-                (x + point_radius + 5, y - point_radius - 5),
-                n2a(index),
-                fill=text_color,
-                font=font,
-            )
-
+        # Draw lines
         for (x1, y1), (x2, y2) in lines:
-            draw.line([(x1, y1), (x2, y2)], fill=line_color, width=2)
+            ax.plot([x1, x2], [y1, y2], color=line_color, linewidth=2)
 
+        # Adjust layout and return the figure as an image
+        plt.tight_layout()
+        plt.draw()
+        
+        # Convert the Matplotlib figure to a PIL image
+        plt_image = plt.gcf()
+        plt_image.canvas.draw()
+        image = np.frombuffer(plt_image.canvas.tostring_rgb(), dtype=np.uint8)
+        image = image.reshape(plt_image.canvas.get_width_height()[::-1] + (3,))
+        
         return image
+
 
 
     def plotter_text(text, color="black", force=False, auto_next_line=True):
@@ -3530,7 +3541,7 @@ if tool == "Draw":
         if error:
             st.error("Invalid command. Please try again.")
         else:
-            if result["image"]:
+            if result["image"] is not None:
                 st.session_state.diagram_image = result["image"]
 
             if result["num_points"]:
@@ -3558,7 +3569,7 @@ if tool == "Join":
                 if error:
                     st.error("Invalid command. Please try again.")
                 else:
-                    if result["image"]:
+                    if result["image"] is not None:
                         st.session_state.diagram_image = result["image"]
 
                     if result["num_points"]:
@@ -3596,7 +3607,7 @@ if tool == "Extend":
             if error:
                 st.error("Invalid command. Please try again.")
             else:
-                if result["image"]:
+                if result["image"] is not None:
                     st.session_state.diagram_image = result["image"]
 
                 if result["num_points"]:
@@ -3627,7 +3638,7 @@ if tool == "Perpendicular":
             if error:
                 st.error("Invalid command. Please try again.")
             else:
-                if result["image"]:
+                if result["image"] is not None:
                     st.session_state.diagram_image = result["image"]
 
                 if result["num_points"]:
@@ -3655,7 +3666,7 @@ if tool == "Split":
             if error:
                 st.error("Invalid command. Please try again.")
             else:
-                if result["image"]:
+                if result["image"] is not None:
                     st.session_state.diagram_image = result["image"]
 
                 if result["num_points"]:
@@ -3684,7 +3695,7 @@ if tool == "Set Angles Equal":
                 if error:
                     st.error("Invalid command. Please try again.")
                 else:
-                    if result["image"]:
+                    if result["image"] is not None:
                         st.session_state.diagram_image = result["image"]
 
                     if result["num_points"]:
@@ -3715,7 +3726,7 @@ if tool == "Angle Value":
             if error:
                 st.error("Invalid command. Please try again.")
             else:
-                if result["image"]:
+                if result["image"] is not None:
                     st.session_state.diagram_image = result["image"]
 
                 if result["num_points"]:
@@ -3743,7 +3754,7 @@ if tool == "Set Lines Equal":
             if error:
                 st.error("Invalid command. Please try again.")
             else:
-                if result["image"]:
+                if result["image"] is not None:
                     st.session_state.diagram_image = result["image"]
 
                 if result["num_points"]:
@@ -3773,7 +3784,7 @@ if tool == "Parallel Line":
             if error:
                 st.error("Invalid command. Please try again.")
             else:
-                if result["image"]:
+                if result["image"] is not None:
                     st.session_state.diagram_image = result["image"]
 
                 if result["num_points"]:
